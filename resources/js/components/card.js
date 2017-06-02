@@ -1,7 +1,7 @@
 const React = require('react');
-import { CardModal } from './card-modal';
+import CardModal from './card-modal';
 
-export class Card extends React.Component {
+export default class Card extends React.Component {
     _delete() {
         this.props.delete(this.props.card.id);
     }

@@ -1,6 +1,6 @@
 const React = require('react');
 
-export class Modal extends React.Component {
+export default class Modal extends React.Component {
 
     _show() {
         return this.props.show ? {display: 'block'} : {display: 'none'};

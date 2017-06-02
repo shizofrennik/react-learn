@@ -1,7 +1,7 @@
 const React = require('react');
-import { Comment } from './comment'
+import Comment from './comment'
 
-export class CardModal extends React.Component {
+export default class CardModal extends React.Component {
     constructor() {
         super();
         this.state = {

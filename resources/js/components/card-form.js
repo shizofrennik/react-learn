@@ -1,6 +1,6 @@
 const React = require('react');
 
-export class CardForm extends React.Component {
+export default class CardForm extends React.Component {
     constructor() {
         super();
         this.state = {

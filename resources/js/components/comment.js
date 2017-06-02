@@ -1,6 +1,6 @@
 const React = require('react');
 
-export class Comment extends React.Component {
+export default class Comment extends React.Component {
     constructor() {
         super();
         this.state = {

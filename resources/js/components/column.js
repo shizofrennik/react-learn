@@ -1,8 +1,8 @@
 const React = require('react');
-import { CardForm } from './card-form';
-import { Card } from './card';
+import CardForm from './card-form';
+import Card from './card';
 
-export class Column extends React.Component {
+export default class Column extends React.Component {
     constructor() {
         super();
         this.state = {

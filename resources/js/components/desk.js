@@ -1,8 +1,8 @@
 const React = require('react');
-import { Modal } from './modal';
-import { Column } from './column';
+import Modal from './modal';
+import Column from './column';
 
-export class Desk extends React.Component {
+export default class Desk extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
