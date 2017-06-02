@@ -1,4 +1,4 @@
-let React = require('react');
+const React = require('react');
 import { Modal } from './modal';
 import { Column } from './column';
 
@@ -61,6 +61,7 @@ export class Desk extends React.Component {
                             toggleModal={this._toggleModal.bind(this)}
                             showModal={this._showModal.bind(this)}
                             update={this._updateColumn.bind(this)} 
+                            user={this.state.user}
                             key={column.id}/>)
         })
     }

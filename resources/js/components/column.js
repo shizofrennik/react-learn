@@ -1,4 +1,4 @@
-let React = require('react');
+const React = require('react');
 import { CardForm } from './card-form';
 import { Card } from './card';
 
@@ -36,6 +36,7 @@ export class Column extends React.Component {
         if(cards.length > 0) {
             return cards.map((card) => <Card card={card} 
                                              key={card.id}
+                                             user={this.props.user}
                                              toggleModal={this.props.toggleModal}
                                              setModalContent={this.props.setModalContent}
                                              showModal={this.props.showModal}
@@ -67,11 +68,19 @@ export class Column extends React.Component {
                              save={this._saveCard.bind(this)}/>
         }
     }
+    
+    _addCardButton() {
+        return this.state.newCard ? null : (<button type="button"
+                                                    className="btn btn-default"
+                                                    onClick={this._addCard.bind(this)}>
+                                                Add card
+                                            </button>);
+    }
 
     _saveCard(title) {
         let column = this.props.column;
         
-        (column.cards.length > 0) ? column.cards.push({id: 1 + column.cards.length, title}) : column.cards.push({id: 1, title});
+        (column.cards.length > 0) ? column.cards.push({id: 1 + column.cards.length, title, owner: this.props.user, comments: []}) : column.cards.push({id: 1, title, owner: this.props.user, comments: []});
         this.props.update(column);
         
         this.setState({
@@ -81,7 +90,6 @@ export class Column extends React.Component {
     
     _updateCard(card) {
         let column = this.props.column;
-        console.log(card);
         column.cards.forEach((item, i) => {
             if(item.id == card.id) {
                 column.cards[i] = card;
@@ -124,9 +132,7 @@ export class Column extends React.Component {
                 {this._getCards()}
                 {this._cardForm()}
                 <br/>
-                <button type="button" 
-                        className="btn btn-default" 
-                        onClick={this._addCard.bind(this)}>Add card</button>
+                {this._addCardButton()}
             </section>
         )
     }
