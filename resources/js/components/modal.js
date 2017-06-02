@@ -1,11 +1,6 @@
-const React = require('react');
+import React from 'react';
 
 export default class Modal extends React.Component {
-
-    _show() {
-        return this.props.show ? {display: 'block'} : {display: 'none'};
-    }
-
     _saveUser() {
         this.props.updateUser(this.userInput.value);
     }
@@ -43,8 +38,7 @@ export default class Modal extends React.Component {
         return (
             <div id="myModal" 
                  className="modal fade in" 
-                 role="dialog" 
-                 style={this._show()}>
+                 role="dialog">
                 <div className="modal-dialog">
                     {this._modalContent()}
                 </div>

@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 import CardModal from './card-modal';
 
 export default class Card extends React.Component {
