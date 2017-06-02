@@ -18,7 +18,7 @@ export class Card extends React.Component {
         let card = this.props.card;
         return (<section className="card clearfix">
                     <div  className="card__body" onClick={this._setModalContent.bind(this)}>
-                        <span>{card.title}</span>
+                        <span>{card.title ? card.title : '...'}</span>
                         <div className="card__comments">comments: {card.comments.length > 0 ? card.comments.length : 'none'}</div>
                     </div>
                     <span className="card__close glyphicon glyphicon-remove"

@@ -47,17 +47,19 @@ export class Column extends React.Component {
     }
 
     _header() {
+        let column = this.props.column;
         if(this.state.edit) {
             return (<div className="form-group">
                         <input ref={(input) => { this.headerInput = input; }}
                                className="form-control"
-                               defaultValue={this.props.column.title}
+                               placeholder="Column title..."
+                               defaultValue={column.title}
                                onBlur={this._headerUpdate.bind(this)}/>
                     </div>)
         } else {
             return (<h4 className="column__header"
                         onClick={this._editHeader.bind(this)}>
-                            {this.props.column.title}
+                            { column.title ? column.title : '...' }
                     </h4>)
         }
     }

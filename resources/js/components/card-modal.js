@@ -89,13 +89,14 @@ export class CardModal extends React.Component {
             return (<div className="form-group">
                 <input ref={(input) => { this.titleInput = input; }}
                        className="form-control"
-                       defaultValue={card.title ? card.title : "Title..."}
+                       placeholder="Title..."
+                       defaultValue={card.title}
                        onBlur={this._titleUpdate.bind(this)}/>
             </div>)
         } else {
             return (<h4 className="column__header"
                         onClick={this._editTitle.bind(this)}>
-                {card.title ? card.title : "Title..."}
+                {card.title ? card.title : "..."}
             </h4>)
         }
     }
@@ -106,7 +107,8 @@ export class CardModal extends React.Component {
             return (<div className="form-group">
                 <input ref={(input) => { this.descInput = input; }}
                        className="form-control"
-                       defaultValue={card.description ? card.description : "Description..."}
+                       placeholder="Description"
+                       defaultValue={card.description}
                        onBlur={this._descriptionUpdate.bind(this)}/>
             </div>)
         } else {
