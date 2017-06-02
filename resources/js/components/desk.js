@@ -9,13 +9,20 @@ export class Desk extends React.Component {
             showModal: false,
             user: null,
             columns: null,
-            lastUpdated: new Date()
+            lastUpdated: new Date(),
+            modalContent: null
         };
     }
 
     _toggleModal() {
         this.setState({
             showModal: !this.state.showModal
+        })
+    }
+    
+    _showModal() {
+        this.setState({
+            showModal: true
         })
     }
 
@@ -48,7 +55,24 @@ export class Desk extends React.Component {
     }
 
     _getColumns() {
-        return this.state.columns.map((column) => <Column column={column} update={this._updateColumn.bind(this)} key={column.id}/>)
+        return this.state.columns.map((column) => { 
+            return (<Column column={column}
+                            setModalContent={this._setModalContent.bind(this)}
+                            toggleModal={this._toggleModal.bind(this)}
+                            showModal={this._showModal.bind(this)}
+                            update={this._updateColumn.bind(this)} 
+                            key={column.id}/>)
+        })
+    }
+
+    _setModalContent(content) {
+        this.setState({
+            content
+        });
+    }
+    
+    _getModalContent() {
+        return this.state.content
     }
     
     componentWillMount() {
@@ -56,7 +80,7 @@ export class Desk extends React.Component {
             showModal = !user;
 
         let columns = localStorage.getItem('columns'),
-            string = JSON.stringify([{id: 1, title: 'TODO'}, {id: 2, title: 'In Progress'}, {id: 3, title: 'Testing'}, {id: 4, title: 'Done'}]);
+            string = JSON.stringify([{id: 1, title: 'TODO', cards: []}, {id: 2, title: 'In Progress', cards: []}, {id: 3, title: 'Testing', cards: []}, {id: 4, title: 'Done', cards: []}]);
         
         if(!columns) localStorage.setItem('columns', string);
         
@@ -87,6 +111,7 @@ export class Desk extends React.Component {
                        onKeyUp={this._toggleModal.bind(this)}
                        user={this.state.user}
                        updateUser={this._updateUser.bind(this)}
+                       getModalContent={this._getModalContent.bind(this)}
                 />
             </div>
         )

@@ -34,7 +34,13 @@ export class Column extends React.Component {
     _getCards() {
         let cards = this.state.cards;
         if(cards.length > 0) {
-            return cards.map((card) => <Card card={card} key={card.id} delete={this._deleteCard.bind(this)}/>);
+            return cards.map((card) => <Card card={card} 
+                                             key={card.id}
+                                             toggleModal={this.props.toggleModal}
+                                             setModalContent={this.props.setModalContent}
+                                             showModal={this.props.showModal}
+                                             updateCard={this._updateCard.bind(this)}
+                                             delete={this._deleteCard.bind(this)}/>);
         }
 
     }
@@ -57,27 +63,38 @@ export class Column extends React.Component {
 
     _cardForm() {
         if (this.state.newCard) {
-            return <CardForm cancel={this._cancelCard.bind(this)} save={this._saveCard.bind(this)}/>
+            return <CardForm cancel={this._cancelCard.bind(this)} 
+                             save={this._saveCard.bind(this)}/>
         }
     }
 
     _saveCard(title) {
-        console.log(title);
         let column = this.props.column;
-        (column.cards) ? column.cards.push({id: 1 + column.cards.length, title}) : column.cards = [{id: 1, title}];
+        
+        (column.cards.length > 0) ? column.cards.push({id: 1 + column.cards.length, title}) : column.cards.push({id: 1, title});
         this.props.update(column);
+        
         this.setState({
             newCard: false
         });
     }
     
+    _updateCard(card) {
+        let column = this.props.column;
+        console.log(card);
+        column.cards.forEach((item, i) => {
+            if(item.id == card.id) {
+                column.cards[i] = card;
+            }
+        });
+        
+        this.props.update(column);
+    }
+    
     _deleteCard(id) {
-        console.log('id' + id);
         let column = this.props.column;
         column.cards.forEach((card, i) => {
-            if(card.id = id) {
-                console.log(column.cards[i]);
-                console.log('card id:' + card.id, 'passed id: ' + id);
+            if(card.id == id) {
                 column.cards.splice(i, 1);
             }
         });
@@ -107,7 +124,9 @@ export class Column extends React.Component {
                 {this._getCards()}
                 {this._cardForm()}
                 <br/>
-                <button type="button" className="btn btn-default" onClick={this._addCard.bind(this)}>Add card</button>
+                <button type="button" 
+                        className="btn btn-default" 
+                        onClick={this._addCard.bind(this)}>Add card</button>
             </section>
         )
     }
