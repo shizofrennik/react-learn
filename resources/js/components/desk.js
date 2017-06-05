@@ -1,38 +1,14 @@
 import React from 'react';
+import {connect} from 'react-redux'
 import Modal from './modal';
 import Column from './column/column';
+import { setUser, showModal, toggleModal, setModalContent, updateColumn } from '../actions';
 
-export default class Desk extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            showModal: false,
-            user: null,
-            columns: null,
-            lastUpdated: new Date(),
-            modalContent: null
-        };
-    }
-
-    componentWillMount() {
-        let user = localStorage.getItem('user'),
-            showModal = !user;
-
-        let columns = localStorage.getItem('columns'),
-            string = JSON.stringify([{id: 1, title: 'TODO', cards: []}, {id: 2, title: 'In Progress', cards: []}, {id: 3, title: 'Testing', cards: []}, {id: 4, title: 'Done', cards: []}]);
-
-        if(!columns) localStorage.setItem('columns', string);
-
-        this.setState({
-            showModal,
-            user,
-            columns: JSON.parse(localStorage.getItem('columns'))
-        });
-    }
+class Desk extends React.Component {
     
     _closeByEsc(e) {
-        if (e.keyCode === 27 && this.state.showModal) {
-            this._toggleModal();
+        if (e.keyCode === 27 && this.props.showModal) {
+            this.props.dispatcher.toggleModal();
         }
     }
 
@@ -44,70 +20,31 @@ export default class Desk extends React.Component {
         document.body.removeEventListener('keydown', this._closeByEsc.bind(this));
     }
 
-    _toggleModal() {
-        this.setState({
-            showModal: !this.state.showModal
-        })
-    }
-    
-    _showModal() {
-        this.setState({
-            showModal: true
-        })
-    }
-
-    _setModalContent(content) {
-        this.setState({
-            content
-        });
-    }
-
     _getModalContent() {
-        return this.state.content
-    }
-
-    _updateUser(name) {
-        localStorage.setItem('user', name);
-        this.setState({
-            user: name,
-            showModal: false
-        })
-    }
-
-    _updateColumn(column) {
-        let columns = JSON.parse(localStorage.getItem('columns')); 
-        columns.forEach((item, i) =>  {
-            if(item.id == column.id) {
-                columns[i] = column;
-            }
-        });
-        localStorage.setItem('columns', JSON.stringify(columns));
-        //temporary crutch for real-time rendering
-        this.setState({
-            lastUpdated: new Date()
-        })
-
+        return this.props.content
     }
 
     _getColumns() {
-        return this.state.columns.map((column) => {
+        let { setModalContent, toggleModal, showModal, updateColumn } = this.props.dispatcher;
+        return this.props.columns.map((column) => {
             return (<Column column={column}
-                            setModalContent={this._setModalContent.bind(this)}
-                            toggleModal={this._toggleModal.bind(this)}
-                            showModal={this._showModal.bind(this)}
-                            update={this._updateColumn.bind(this)}
-                            user={this.state.user}
+                            setModalContent={setModalContent}
+                            toggleModal={toggleModal}
+                            showModal={showModal}
+                            update={updateColumn}
+                            user={this.props.user}
                             key={column.id}/>)
         })
     }
     
     _getModal() {
-        return (this.state.showModal) ? 
-               (<Modal show={this.state.showModal}
-                       toggle={this._toggleModal.bind(this)}
-                       onKeyUp={this._toggleModal.bind(this)}
-                       user={this.state.user}
-                       updateUser={this._updateUser.bind(this)}
+        let { toggleModal, setUser } = this.props.dispatcher;
+        return (this.props.showModal) ? 
+               (<Modal show={this.props.showModal}
+                       toggle={toggleModal}
+                       onKeyUp={toggleModal}
+                       user={this.props.user}
+                       updateUser={setUser}
                        getModalContent={this._getModalContent.bind(this)}
                />) : null
     }
@@ -115,7 +52,7 @@ export default class Desk extends React.Component {
     render() {
         return (
             <div>
-                <h1>{this.state.user ? `Welcome ${this.state.user}` : 'Please sign in!'}</h1>
+                <h1>{this.props.user ? `Welcome ${this.props.user}` : 'Please sign in!'}</h1>
                 <div className="row">
                     {this._getColumns()}
                 </div>
@@ -124,3 +61,38 @@ export default class Desk extends React.Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    let { user, columns, showModal, content } = state;
+    return {
+        user,
+        columns,
+        showModal,
+        content
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        dispatcher: {
+            setUser: (user) => {
+                dispatch(setUser(user));
+            },
+            showModal: () => {
+                dispatch(showModal());
+            },
+            toggleModal: () => {
+                dispatch(toggleModal());
+            },
+            setModalContent: (content) => {
+                dispatch(setModalContent(content))
+            },
+            updateColumn: (column) => {
+                dispatch(updateColumn(column))
+            }
+        }
+    }
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Desk)
