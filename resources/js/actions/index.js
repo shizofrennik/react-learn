@@ -5,7 +5,7 @@ export const setUser = (user) => {
     }
 };
 
-export const showModal = () => {
+export const showModalFunc = () => {
     return {
         type: 'SHOW_MODAL'
     }

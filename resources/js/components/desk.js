@@ -1,14 +1,15 @@
 import React from 'react';
-import {connect} from 'react-redux'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Modal from './modal';
 import Column from './column/column';
-import { setUser, showModal, toggleModal, setModalContent, updateColumn } from '../actions';
+import { setUser, showModalFunc, toggleModal, setModalContent, updateColumn } from '../actions';
 
 class Desk extends React.Component {
     
     _closeByEsc(e) {
         if (e.keyCode === 27 && this.props.showModal) {
-            this.props.dispatcher.toggleModal();
+            this.props.toggleModal();
         }
     }
 
@@ -25,12 +26,12 @@ class Desk extends React.Component {
     }
 
     _getColumns() {
-        let { setModalContent, toggleModal, showModal, updateColumn } = this.props.dispatcher;
+        let { setModalContent, toggleModal, showModalFunc, updateColumn } = this.props;
         return this.props.columns.map((column) => {
             return (<Column column={column}
                             setModalContent={setModalContent}
                             toggleModal={toggleModal}
-                            showModal={showModal}
+                            showModal={showModalFunc}
                             update={updateColumn}
                             user={this.props.user}
                             key={column.id}/>)
@@ -38,7 +39,7 @@ class Desk extends React.Component {
     }
     
     _getModal() {
-        let { toggleModal, setUser } = this.props.dispatcher;
+        let { toggleModal, setUser } = this.props;
         return (this.props.showModal) ? 
                (<Modal show={this.props.showModal}
                        toggle={toggleModal}
@@ -62,6 +63,7 @@ class Desk extends React.Component {
     }
 }
 
+
 const mapStateToProps = state => {
     let { user, columns, showModal, content } = state;
     return {
@@ -73,25 +75,13 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-    return {
-        dispatcher: {
-            setUser: (user) => {
-                dispatch(setUser(user));
-            },
-            showModal: () => {
-                dispatch(showModal());
-            },
-            toggleModal: () => {
-                dispatch(toggleModal());
-            },
-            setModalContent: (content) => {
-                dispatch(setModalContent(content))
-            },
-            updateColumn: (column) => {
-                dispatch(updateColumn(column))
-            }
-        }
-    }
+    return bindActionCreators({
+        setUser,
+        showModalFunc,
+        toggleModal,
+        setModalContent,
+        updateColumn
+    }, dispatch);
 };
 
 

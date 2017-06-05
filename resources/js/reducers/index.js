@@ -17,7 +17,10 @@ export default function (state = inititalState, action) {
     switch (action.type) {
         case 'SET_USER':
             localStorage.setItem('user', action.user);
-            return Object.assign({}, state, {user: action.user});
+            return Object.assign({}, state, {
+                user: action.user, 
+                showModal: false
+            });
         case 'SHOW_MODAL':
             return Object.assign({}, state, {showModal: true});
         case 'TOGGLE_MODAL':
