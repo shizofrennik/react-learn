@@ -4,16 +4,22 @@ export default class CardTitle extends React.Component {
     constructor() {
         super();
         this.state = {
-            edit: false
+            edit: false,
+            value: ''
         };
+    }
+
+    _handleChange(e) {
+        this.setState({value: e.target.value});
     }
 
     _titleUpdate() {
         let card = this.props.card;
-        card.title = this.titleInput.value;
+        card.title = this.state.value;
         this.props.updateCard(card);
         this.setState({
-            edit: false
+            edit: false,
+            value: ''
         });
     }
 
@@ -27,7 +33,7 @@ export default class CardTitle extends React.Component {
         let card = this.props.card;
         if(this.state.edit) {
             return (<div className="form-group">
-                <input ref={(input) => { this.titleInput = input; }}
+                <input onChange={ this._handleChange.bind(this)}
                        className="form-control"
                        placeholder="Title..."
                        defaultValue={card.title}

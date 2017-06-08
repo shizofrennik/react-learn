@@ -1,9 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateColumn } from '../../actions';
 import CardForm from '../card/card-form';
 import Card from '../card/card';
 import ColumnHeader from './column-header';
 
-export default class Column extends React.Component {
+class Column extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -35,7 +38,7 @@ export default class Column extends React.Component {
         let column = this.props.column;
 
         (column.cards.length > 0) ? column.cards.push({id: 1 + column.cards.length, title, owner: this.props.user, comments: []}) : column.cards.push({id: 1, title, owner: this.props.user, comments: []});
-        this.props.update(column);
+        this.props.updateColumn(column);
 
         this.setState({
             newCard: false
@@ -50,7 +53,7 @@ export default class Column extends React.Component {
             }
         });
 
-        this.props.update(column);
+        this.props.updateColumn(column);
     }
 
     _deleteCard(id) {
@@ -60,7 +63,7 @@ export default class Column extends React.Component {
                 column.cards.splice(i, 1);
             }
         });
-        this.props.update(column);
+        this.props.updateColumn(column);
     }
 
     _getCards() {
@@ -68,10 +71,6 @@ export default class Column extends React.Component {
         if(cards.length > 0) {
             return cards.map((card) => <Card card={card} 
                                              key={card.id}
-                                             user={this.props.user}
-                                             toggleModal={this.props.toggleModal}
-                                             setModalContent={this.props.setModalContent}
-                                             showModal={this.props.showModal}
                                              updateCard={this._updateCard.bind(this)}
                                              delete={this._deleteCard.bind(this)}/>);
         }
@@ -96,7 +95,7 @@ export default class Column extends React.Component {
     render() {
         return (
             <section className="column col-sm-2">
-                <ColumnHeader column={this.props.column} update={this.props.update}/>
+                <ColumnHeader column={this.props.column} />
                 <hr/>
                 {this._getCards()}
                 {this._cardForm()}
@@ -106,3 +105,18 @@ export default class Column extends React.Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    let { user } = state;
+    return {
+        user
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        updateColumn
+    }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Column)

@@ -1,10 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toggleModal } from '../../actions';
 import Comment from '../comment/comment';
 import CardDescription from './card-description';
 import CardTitle from './card-title';
 import CommentForm from '../comment/comment-form';
 
-export default class CardModal extends React.Component {
+class CardModal extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -44,7 +47,7 @@ export default class CardModal extends React.Component {
                     <button type="button"
                             className="close"
                             data-dismiss="modal"
-                            onClick={this.props.toggle}>&times;</button>
+                            onClick={this.props.toggleModal}>&times;</button>
 
                     <CardTitle card={card} 
                                updateCard={update}/>
@@ -59,9 +62,7 @@ export default class CardModal extends React.Component {
 
                     <CommentForm card={card} 
                                  updateCard={update}
-                                 user={this.props.user}
                                  updateComments={this._updateCommentsCount.bind(this)}/>
-
                     <br/>
                     <p>Card was created: {card.owner}</p>
                 </div>
@@ -70,9 +71,17 @@ export default class CardModal extends React.Component {
                     <button type="button"
                             className="btn btn-default"
                             data-dismiss="modal"
-                            onClick={this.props.toggle}>Close</button>
+                            onClick={this.props.toggleModal}>Close</button>
                 </div>
             </div>
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        toggleModal
+    }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(CardModal)

@@ -1,17 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { showModalFunc, setModalContent } from '../../actions';
 import CardModal from './card-modal';
 
-export default class Card extends React.Component {
+class Card extends React.Component {
     _delete() {
         this.props.delete(this.props.card.id);
     }
 
     _setModalContent() {
         this.props.setModalContent(<CardModal card={this.props.card}
-                                              user={this.props.user}
-                                              updateCard={this.props.updateCard}
-                                              toggle={this.props.toggleModal}/>);
-        this.props.showModal();
+                                              updateCard={this.props.updateCard}/>);
+        this.props.showModalFunc();
     }
 
     render() {
@@ -27,3 +28,19 @@ export default class Card extends React.Component {
                 </section>)
     }
 }
+
+const mapStateToProps = state => {
+    let { user } = state;
+    return {
+        user
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        setModalContent,
+        showModalFunc
+    }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card)

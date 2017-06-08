@@ -4,8 +4,13 @@ export default class CardDescription extends React.Component {
     constructor() {
         super();
         this.state = {
-            edit: false
+            edit: false,
+            value: ''
         };
+    }
+    
+    _handleChange(e) {
+        this.setState({value: e.target.value});
     }
 
     _editDescription() {
@@ -16,10 +21,11 @@ export default class CardDescription extends React.Component {
 
     _descriptionUpdate() {
         let card = this.props.card;
-        card.description = this.descInput.value;
+        card.description = this.state.value;
         this.props.updateCard(card);
         this.setState({
-            edit: false
+            edit: false,
+            value: ''
         });
     }
     
@@ -27,7 +33,7 @@ export default class CardDescription extends React.Component {
         let card = this.props.card;
         if(this.state.edit) {
             return (<div className="form-group">
-                <input ref={(input) => { this.descInput = input; }}
+                <input onChange={this._handleChange.bind(this)}
                        className="form-control"
                        placeholder="Description"
                        defaultValue={card.description}

@@ -4,15 +4,20 @@ export default class CommentBody extends React.Component {
     constructor() {
         super();
         this.state = {
-            edit: false
+            edit: false,
+            value: ''
         };
+    }
+
+    _handleChange(e) {
+        this.setState({value: e.target.value});
     }
 
     _updateComment() {
         let comment = this.props.comment,
             card = this.props.card;
 
-        comment.body = this.bodyInput.value;
+        comment.body = this.state.value;
 
         card.comments.forEach((item, i) => {
             if(item.id == comment.id) {
@@ -23,7 +28,8 @@ export default class CommentBody extends React.Component {
         this.props.update(card);
 
         this.setState({
-            edit: false
+            edit: false,
+            value: ''
         });
     }
     
@@ -38,7 +44,7 @@ export default class CommentBody extends React.Component {
 
         if(this.state.edit) {
             return (<div className="form-group">
-                <input ref={(input) => { this.bodyInput = input; }}
+                <input onChange={ this._handleChange.bind(this) }
                        className="form-control"
                        defaultValue={comment.body}
                        onBlur={this._updateComment.bind(this)}/>

@@ -1,8 +1,15 @@
+import {SET_USER, SHOW_MODAL, TOGGLE_MODAL, SET_MODAL_CONTENT, UPDATE_COLUMN} from '../constants'
+
 let user = localStorage.getItem('user'),
     showModal = !user;
 
 let columns = localStorage.getItem('columns'),
-    string = JSON.stringify([{id: 1, title: 'TODO', cards: []}, {id: 2, title: 'In Progress', cards: []}, {id: 3, title: 'Testing', cards: []}, {id: 4, title: 'Done', cards: []}]);
+    string = JSON.stringify([
+        {id: 1, title: 'TODO', cards: []},
+        {id: 2, title: 'In Progress', cards: []},
+        {id: 3, title: 'Testing', cards: []},
+        {id: 4, title: 'Done', cards: []}
+    ]);
 
 if(!columns) localStorage.setItem('columns', string);
 
@@ -13,31 +20,38 @@ let inititalState = {
     modalContent: null
 };
 
-export default function (state = inititalState, action) {
-    switch (action.type) {
-        case 'SET_USER':
-            localStorage.setItem('user', action.user);
-            return Object.assign({}, state, {
-                user: action.user, 
-                showModal: false
-            });
-        case 'SHOW_MODAL':
-            return Object.assign({}, state, {showModal: true});
-        case 'TOGGLE_MODAL':
-            return Object.assign({}, state, {showModal: !state.showModal});   
-        case 'SET_MODAL_CONTENT':
-            return Object.assign({}, state, {content: action.content});
-        case 'UPDATE_COLUMN':
-            let columns = state.columns,
-                column = action.column;
-            columns.forEach((item, i) =>  {
-                if(item.id == column.id) {
-                    columns[i] = column;
-                }
-            });
-            localStorage.setItem('columns', JSON.stringify(columns));
-            return Object.assign({}, state, {columns});
-        default:
-            return state
+const ACTION_HANDLERS = {
+    [SET_USER]: (state, action) => {
+        localStorage.setItem('user', action.user);
+        return {...state,
+            user: action.user,
+            showModal: false
+        };
+    },
+    [SHOW_MODAL]: (state, action) => {
+        return { ...state, showModal: true };
+    },
+    [TOGGLE_MODAL]: (state, action) => {
+        return { ...state, showModal: !state.showModal };
+    },
+    [SET_MODAL_CONTENT]: (state, action) => {
+        return {...state, content: action.content};
+    },
+    [UPDATE_COLUMN]: (state, action) => {
+        let columns = state.columns,
+            column = action.column;
+        columns.forEach((item, i) =>  {
+            if(item.id == column.id) {
+                columns[i] = column;
+            }
+        });
+        localStorage.setItem('columns', JSON.stringify(columns));
+        return {...state, columns};
     }
+
+};
+
+export default function (state = inititalState, action) {
+    const handler = ACTION_HANDLERS[action.type];
+    return handler ? handler(state, action) : state;
 }

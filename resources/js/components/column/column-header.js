@@ -1,12 +1,20 @@
 import React from 'react'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateColumn } from '../../actions';
 
-export default class ColumnHeader extends React.Component {
+class ColumnHeader extends React.Component {
 
     constructor() {
         super();
         this.state = {
-            edit: false
+            edit: false,
+            value: ''
         }
+    }
+
+    _handleChange(e) {
+        this.setState({value: e.target.value});
     }
 
     _editHeader() {
@@ -17,10 +25,11 @@ export default class ColumnHeader extends React.Component {
 
     _headerUpdate() {
         let column = this.props.column;
-        column.title = this.headerInput.value;
-        this.props.update(column);
+        column.title = this.state.value;
+        this.props.updateColumn(column);
         this.setState({
-            edit: false
+            edit: false,
+            value: ''
         });
     }
 
@@ -28,8 +37,8 @@ export default class ColumnHeader extends React.Component {
         let column = this.props.column;
         if(this.state.edit) {
             return (<div className="form-group">
-                <input ref={(input) => { this.headerInput = input; }}
-                       className="form-control"
+                <input className="form-control"
+                       onChange={ this._handleChange.bind(this) }
                        placeholder="Column title..."
                        defaultValue={column.title}
                        onBlur={this._headerUpdate.bind(this)}/>
@@ -42,3 +51,11 @@ export default class ColumnHeader extends React.Component {
         }
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        updateColumn
+    }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(ColumnHeader)

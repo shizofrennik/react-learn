@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Modal from './modal';
 import Column from './column/column';
-import { setUser, showModalFunc, toggleModal, setModalContent, updateColumn } from '../actions';
+import { setUser, toggleModal } from '../actions';
 
 class Desk extends React.Component {
     
@@ -26,14 +26,8 @@ class Desk extends React.Component {
     }
 
     _getColumns() {
-        let { setModalContent, toggleModal, showModalFunc, updateColumn } = this.props;
         return this.props.columns.map((column) => {
             return (<Column column={column}
-                            setModalContent={setModalContent}
-                            toggleModal={toggleModal}
-                            showModal={showModalFunc}
-                            update={updateColumn}
-                            user={this.props.user}
                             key={column.id}/>)
         })
     }
@@ -77,10 +71,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         setUser,
-        showModalFunc,
-        toggleModal,
-        setModalContent,
-        updateColumn
+        toggleModal
     }, dispatch);
 };
 
