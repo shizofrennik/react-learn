@@ -47,32 +47,15 @@ class Column extends React.Component {
 
     _updateCard(card) {
         let column = this.props.column;
-        column.cards.forEach((item, i) => {
-            if(item.id == card.id) {
-                column.cards[i] = card;
-            }
-        });
-
-        this.props.updateColumn(column);
-    }
-
-    _deleteCard(id) {
-        let column = this.props.column;
-        column.cards.forEach((card, i) => {
-            if(card.id == id) {
-                column.cards.splice(i, 1);
-            }
-        });
-        this.props.updateColumn(column);
+        this.props.updateCard(column, card);
     }
 
     _getCards() {
         let cards = this.state.cards;
         if(cards.length > 0) {
-            return cards.map((card) => <Card card={card} 
-                                             key={card.id}
-                                             updateCard={this._updateCard.bind(this)}
-                                             delete={this._deleteCard.bind(this)}/>);
+            return cards.map((card) => <Card card={card}
+                                             column={this.props.column}
+                                             key={card.id}/>);
         }
 
     }

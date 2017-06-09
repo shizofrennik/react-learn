@@ -1,6 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateCard } from '../../actions';
 
-export default class CommentBody extends React.Component {
+class CommentBody extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -14,8 +17,7 @@ export default class CommentBody extends React.Component {
     }
 
     _updateComment() {
-        let comment = this.props.comment,
-            card = this.props.card;
+        let { comment, card, column } = this.props;
 
         comment.body = this.state.value;
 
@@ -25,7 +27,7 @@ export default class CommentBody extends React.Component {
             }
         });
 
-        this.props.update(card);
+        this.props.updateCard(column, card);
 
         this.setState({
             edit: false,
@@ -55,3 +57,11 @@ export default class CommentBody extends React.Component {
         }
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        updateCard
+    }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(CommentBody)

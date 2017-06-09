@@ -28,19 +28,18 @@ class CardModal extends React.Component {
     }
 
     _comments() {
-        let card = this.props.card;
+        let { column, card } = this.props;
         if(card.comments) {
             return card.comments.map(comment => (<Comment comment={comment} 
-                                                          update={this.props.updateCard}
                                                           card={card}
+                                                          column={column}
                                                           updateComments={this._updateCommentsCount.bind(this)}
                                                           key={comment.id}/>))
         }
     }
 
     render() {
-        let card = this.props.card;
-        let update = this.props.updateCard;
+        let { card, column } = this.props;
         return (
             <div className="modal-content">
                 <div className="modal-header">
@@ -50,18 +49,18 @@ class CardModal extends React.Component {
                             onClick={this.props.toggleModal}>&times;</button>
 
                     <CardTitle card={card} 
-                               updateCard={update}/>
+                               column={column}/>
                 </div>
                 <div className="modal-body">
-                    <CardDescription card={card} 
-                                     updateCard={this.props.updateCard}/>
+                    <CardDescription card={card}
+                                     column={column}/>
 
                     <br/>
 
                     {this._comments()}
 
-                    <CommentForm card={card} 
-                                 updateCard={update}
+                    <CommentForm card={card}
+                                 column={column}
                                  updateComments={this._updateCommentsCount.bind(this)}/>
                     <br/>
                     <p>Card was created: {card.owner}</p>

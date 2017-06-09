@@ -1,4 +1,12 @@
-import {SET_USER, SHOW_MODAL, TOGGLE_MODAL, SET_MODAL_CONTENT, UPDATE_COLUMN} from '../constants'
+import {
+    SET_USER, 
+    SHOW_MODAL, 
+    TOGGLE_MODAL, 
+    SET_MODAL_CONTENT, 
+    UPDATE_COLUMN,
+    UPDATE_CARD,
+    DELETE_CARD
+} from '../constants'
 
 let user = localStorage.getItem('user'),
     showModal = !user;
@@ -22,7 +30,6 @@ let inititalState = {
 
 const ACTION_HANDLERS = {
     [SET_USER]: (state, action) => {
-        localStorage.setItem('user', action.user);
         return {...state,
             user: action.user,
             showModal: false
@@ -45,8 +52,41 @@ const ACTION_HANDLERS = {
                 columns[i] = column;
             }
         });
-        localStorage.setItem('columns', JSON.stringify(columns));
         return {...state, columns};
+    },
+    [UPDATE_CARD]: (state, action) => {
+        let newState = {...state},
+            columns = newState.columns,
+            column = action.column,
+            card = action.card;
+
+        columns.forEach(col => {
+            if(col.id == column.id) {
+                col.cards.forEach((item, i) => {
+                    if(item.id == card.id) {
+                        col.cards[i] = card;
+                    }    
+                })
+            }
+        });
+        return newState;
+    },
+    [DELETE_CARD]: (state, action) => {
+        let newState = {...state},
+            columns = newState.columns,
+            column = action.column,
+            card = action.card;
+
+        columns.forEach(col => {
+            if(col.id == column.id) {
+                col.cards.forEach((item, i) => {
+                    if(item.id == card.id) {
+                        column.cards.splice(i, 1);
+                    }
+                })
+            }
+        });
+        return newState;
     }
 
 };

@@ -1,5 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateCard } from '../../actions';
+
 
 class CommentForm extends React.Component {
     constructor() {
@@ -15,9 +18,11 @@ class CommentForm extends React.Component {
 
     _createComment() {
         let body = this.state.value;
-        let card = this.props.card;
+        let { card, column } = this.props;
+        console.log(card);
+        console.log(column);
         (card.comments.length > 0) ? card.comments.push({id: 1 + card.comments.length, body, owner: this.props.user}) : card.comments.push({id: 1, body, owner: this.props.user});
-        this.props.updateCard(card);
+        this.props.updateCard(column, card);
         //temporary crutch for real-time rendering
         this.props.updateComments();
 
@@ -49,4 +54,10 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps)(CommentForm)
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        updateCard
+    }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentForm)

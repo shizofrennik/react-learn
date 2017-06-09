@@ -1,6 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateCard } from '../../actions';
 
-export default class CardDescription extends React.Component {
+class CardDescription extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -20,9 +23,9 @@ export default class CardDescription extends React.Component {
     }
 
     _descriptionUpdate() {
-        let card = this.props.card;
+        let { card, column } = this.props;
         card.description = this.state.value;
-        this.props.updateCard(card);
+        this.props.updateCard(column, card);
         this.setState({
             edit: false,
             value: ''
@@ -47,3 +50,11 @@ export default class CardDescription extends React.Component {
         }
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        updateCard
+    }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(CardDescription)

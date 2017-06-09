@@ -1,29 +1,30 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateCard } from '../../actions';
 import CommentBody from './comment-body';
 
-export default class Comment extends React.Component {
+class Comment extends React.Component {
     
     _deleteComment() {
-        let card = this.props.card,
-            comment = this.props.comment;
+        let { card, column, comment } = this.props;
         card.comments.forEach((item, i) => {
             if(item.id == comment.id) {
                 card.comments.splice(i, 1);
             }
         });
-        this.props.update(card);
+        this.props.update(column, card);
         //temporary crutch for real-time rendering
         this.props.updateComments();
     }
 
     render() {
-        let comment = this.props.comment;
+        let { comment, column } = this.props;
         return (
             <div className="comment">
                 <CommentBody comment={comment}
-                             update={this.props.update}
+                             column={column}
                              card={this.props.card}/>
-
                 <br/>
 
                 <span className="comment__owner">Writen by: {comment.owner}</span>
@@ -34,3 +35,11 @@ export default class Comment extends React.Component {
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        updateCard
+    }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(Comment)

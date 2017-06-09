@@ -1,20 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { showModalFunc, setModalContent } from '../../actions';
+import { showModalFunc, setModalContent, updateCard, deleteCard } from '../../actions';
 import CardModal from './card-modal';
 
 class Card extends React.Component {
     _delete() {
-        this.props.delete(this.props.card.id);
+        let { column, card, deleteCard } = this.props;
+        deleteCard(column, card);
     }
 
     _setModalContent() {
         this.props.setModalContent(<CardModal card={this.props.card}
-                                              updateCard={this.props.updateCard}/>);
+                                              column={this.props.column}/>);
         this.props.showModalFunc();
     }
-
+    
+    _updateCard() {
+        this.props.updateCard(this.props.column, this.props.card)
+    }
+    
     render() {
         let card = this.props.card;
         return (<section className="card clearfix">
@@ -39,7 +44,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         setModalContent,
-        showModalFunc
+        showModalFunc,
+        updateCard,
+        deleteCard
     }, dispatch);
 };
 
