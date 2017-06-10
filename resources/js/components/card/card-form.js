@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class CardForm extends React.Component {
     constructor() {
@@ -41,3 +42,8 @@ export default class CardForm extends React.Component {
         )
     }
 }
+
+CardForm.propTypes = {
+    cancel: PropTypes.func.isRequired,
+    save: PropTypes.func.isRequired
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { updateCard } from '../../actions';
@@ -50,6 +51,13 @@ class CardDescription extends React.Component {
         }
     }
 }
+
+CardDescription.propTypes = {
+    column: PropTypes.object.isRequired,
+    card: PropTypes.object.isRequired,
+    updateCard: PropTypes.func.isRequired
+};
+
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({

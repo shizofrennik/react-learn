@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { updateColumn } from '../../actions';
@@ -51,6 +52,11 @@ class ColumnHeader extends React.Component {
         }
     }
 }
+
+ColumnHeader.propTypes = {
+    column: PropTypes.object.isRequired,
+    updateColumn: PropTypes.func.isRequired
+};
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({

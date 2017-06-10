@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { updateColumn } from '../../actions';
@@ -89,8 +90,15 @@ class Column extends React.Component {
     }
 }
 
+Column.propTypes = {
+    column: PropTypes.object.isRequired,
+    user: PropTypes.string,
+    updateColumn: PropTypes.func.isRequired
+};
+
+
 const mapStateToProps = state => {
-    let { user } = state;
+    let { user } = state.modal;
     return {
         user
     }
@@ -98,7 +106,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-        updateColumn
+        updateColumn: updateColumn
     }, dispatch);
 };
 

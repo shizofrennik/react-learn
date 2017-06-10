@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Modal from './modal';
@@ -6,7 +7,6 @@ import Column from './column/column';
 import { setUser, toggleModal } from '../actions';
 
 class Desk extends React.Component {
-    
     _closeByEsc(e) {
         if (e.keyCode === 27 && this.props.showModal) {
             this.props.toggleModal();
@@ -57,9 +57,18 @@ class Desk extends React.Component {
     }
 }
 
+Desk.propTypes = {
+    user: PropTypes.string,
+    toggleModal: PropTypes.func.isRequired,
+    setUser: PropTypes.func.isRequired,
+    columns: PropTypes.array.isRequired,
+    showModal: PropTypes.bool.isRequired
+};
+
 
 const mapStateToProps = state => {
-    let { user, columns, showModal, content } = state;
+    let { user, showModal, content } = state.modal;
+    let { columns } = state.columns;
     return {
         user,
         columns,

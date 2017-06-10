@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { updateCard } from '../../actions';
@@ -13,7 +14,7 @@ class Comment extends React.Component {
                 card.comments.splice(i, 1);
             }
         });
-        this.props.update(column, card);
+        this.props.updateCard(column, card);
         //temporary crutch for real-time rendering
         this.props.updateComments();
     }
@@ -35,6 +36,13 @@ class Comment extends React.Component {
         )
     }
 }
+
+Comment.propTypes = {
+    column: PropTypes.object.isRequired,
+    card: PropTypes.object.isRequired,
+    comment: PropTypes.object.isRequired,
+    updateComments: PropTypes.func.isRequired
+};
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({

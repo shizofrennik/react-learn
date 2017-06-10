@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { showModalFunc, setModalContent, updateCard, deleteCard } from '../../actions';
@@ -34,8 +35,18 @@ class Card extends React.Component {
     }
 }
 
+Card.propTypes = {
+    user: PropTypes.string,
+    card: PropTypes.object.isRequired,
+    column: PropTypes.object.isRequired,
+    deleteCard: PropTypes.func.isRequired,
+    setModalContent: PropTypes.func.isRequired,
+    showModalFunc: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = state => {
-    let { user } = state;
+    let { user } = state.modal;
     return {
         user
     }

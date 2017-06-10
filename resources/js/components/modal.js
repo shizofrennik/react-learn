@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Modal extends React.Component {
     _saveUser() {
@@ -46,3 +47,11 @@ export default class Modal extends React.Component {
         )
     }
 }
+
+Modal.propTypes = {
+    user: PropTypes.string,
+    getModalContent: PropTypes.func.isRequired,
+    toggle: PropTypes.func.isRequired,
+    updateUser: PropTypes.func.isRequired,
+    show: PropTypes.bool.isRequired
+};
