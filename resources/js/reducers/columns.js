@@ -2,7 +2,8 @@ import {
     UPDATE_COLUMN,
     UPDATE_CARD,
     DELETE_CARD
-} from '../constants'
+} from '../constants';
+import cardsReducer from './cards';
 
 let columns = localStorage.getItem('columns'),
     string = JSON.stringify([
@@ -20,48 +21,37 @@ let initialState = {
 
 const ACTION_HANDLERS = {
     [UPDATE_COLUMN]: (state, action) => {
-        let columns = state.columns,
-            column = action.column;
-        columns.forEach((item, i) =>  {
-            if(item.id == column.id) {
-                columns[i] = column;
+        let columns = state.columns.map(column => {
+            if(column.id != action.column.id) {
+                return {...column};
             }
+            
+            return {...action.column};
         });
+        
         return {...state, columns};
     },
     [UPDATE_CARD]: (state, action) => {
-        let newState = {...state},
-            columns = newState.columns,
-            column = action.column,
-            card = action.card;
-
-        columns.forEach(col => {
-            if(col.id == column.id) {
-                col.cards.forEach((item, i) => {
-                    if(item.id == card.id) {
-                        col.cards[i] = card;
-                    }    
-                })
+        let columns = state.columns.map(column => {
+            if(column.id != action.column.id) {
+                return {...column};
             }
+            
+            return {...column, cards: cardsReducer(column, action)};
         });
-        return newState;
+        
+        return {...state, columns};
     },
     [DELETE_CARD]: (state, action) => {
-        let newState = {...state},
-            columns = newState.columns,
-            column = action.column,
-            card = action.card;
-
-        columns.forEach(col => {
-            if(col.id == column.id) {
-                col.cards.forEach((item, i) => {
-                    if(item.id == card.id) {
-                        column.cards.splice(i, 1);
-                    }
-                })
+        let columns = state.columns.map(column => {
+            if(column.id != action.column.id) {
+                return {...column};
             }
+            
+            return {...column, cards: cardsReducer(column, action)};
         });
-        return newState;
+        
+        return {...state, columns};
     }
 
 };

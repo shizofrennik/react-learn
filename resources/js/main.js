@@ -8,7 +8,7 @@ import { storage } from './listeners';
 
 let store = createStore(reducer);
 window.store = store;
-store.subscribe(storage());
+// store.subscribe(storage());
 
 ReactDOM.render(
     <Provider store={store}>
