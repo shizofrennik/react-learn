@@ -3,7 +3,8 @@ import {
     SHOW_MODAL, 
     TOGGLE_MODAL, 
     SET_MODAL_CONTENT, 
-    UPDATE_COLUMN, 
+    UPDATE_COLUMN,
+    ADD_CARD,
     UPDATE_CARD,
     DELETE_CARD,
 } from '../constants'
@@ -38,6 +39,14 @@ export const updateColumn = (column) => {
     return {
         type: UPDATE_COLUMN,
         column
+    }
+};
+
+export const addCard = (column, card) => {
+    return {
+        type: ADD_CARD,
+        column,
+        card
     }
 };
 

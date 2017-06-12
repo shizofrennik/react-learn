@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateColumn } from '../../actions';
+import { updateColumn, addCard } from '../../actions';
 import CardForm from '../card/card-form';
 import Card from '../card/card';
 import ColumnHeader from './column-header';
@@ -11,8 +11,7 @@ class Column extends React.Component {
     constructor() {
         super();
         this.state = {
-            newCard: false,
-            cards: []
+            newCard: false
         };
     }
 
@@ -36,10 +35,10 @@ class Column extends React.Component {
     }
 
     _saveCard(title) {
-        let column = this.props.column;
+        let { column, cards, user } = this.props;
 
-        (column.cards.length > 0) ? column.cards.push({id: 1 + column.cards.length, title, owner: this.props.user, comments: []}) : column.cards.push({id: 1, title, owner: this.props.user, comments: []});
-        this.props.updateColumn(column);
+        // (this.props.cards.length > 0) ? column.cards.push({id: 1 + column.cards.length, title, owner: this.props.user, comments: []}) : column.cards.push({id: 1, title, owner: this.props.user, comments: []});
+        this.props.addCard(column, {id: cards.length > 0 ? +cards.length + 1 : 1, columnId: column.id, title, owner: user, comments: []});
 
         this.setState({
             newCard: false
@@ -52,10 +51,11 @@ class Column extends React.Component {
     }
 
     _getCards() {
-        let cards = this.state.cards;
+        let { column } = this.props;
+        let cards = this.props.cards.filter((card) => card.columnId == column.id);
         if(cards.length > 0) {
             return cards.map((card) => <Card card={card}
-                                             column={this.props.column}
+                                             column={column}
                                              key={card.id}/>);
         }
 
@@ -100,13 +100,15 @@ Column.propTypes = {
 const mapStateToProps = state => {
     let { user } = state.modal;
     return {
-        user
+        user,
+        cards: state.cards
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-        updateColumn: updateColumn
+        updateColumn,
+        addCard
     }, dispatch);
 };
 

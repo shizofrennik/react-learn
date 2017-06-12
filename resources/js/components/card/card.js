@@ -48,7 +48,8 @@ Card.propTypes = {
 const mapStateToProps = state => {
     let { user } = state.modal;
     return {
-        user
+        user,
+        cards: state.cards 
     }
 };
 

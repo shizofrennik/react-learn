@@ -1,4 +1,5 @@
 import {
+    ADD_CARD,
     UPDATE_CARD,
     DELETE_CARD
 } from '../constants'
@@ -6,17 +7,20 @@ import {
 let initialState = [];
 
 const ACTION_HANDLERS = {
-    [UPDATE_CARD]: (state, action) => {
-        return state.cards.map(card => {
+    [ADD_CARD]: (state = initialState, action) => {
+        return state.concat([action.card]);
+    },
+    [UPDATE_CARD]: (state = initialState, action) => {
+        return state.map(card => {
             if(card.id != action.card.id) {
-                return {...state};
+                return card;
             }
             
-            return {...action.card};
-        }) 
+            return action.card;
+        });
     },
-    [DELETE_CARD]: (state, action) => {
-        return state.cards.filter(card => card.id != action.card.id);
+    [DELETE_CARD]: (state = initialState, action) => {
+        return state.filter(card => card.id != action.card.id);
     }
 };
 
